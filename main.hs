@@ -1,0 +1,1 @@
+hashString :: String -> B.ByteString 

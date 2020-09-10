@@ -159,22 +159,22 @@ def update (hash, newkey):
 			os.chdir(_path)
 
 			f_db = open("Xkeydb0.xrk", "r")
-			existent_lines = [] # Lineas de texto
-			_hash = hash
-			oldkey = ""
+			existent_lines	= [] 	# Lineas de texto del archivo
+			_hash			= hash 	# HASH a buscar
+			oldkey			= ""	# Llave antigua
 
 			for line in f_db.readlines():
 				if line.find(_hash) != -1:
 					OBJ_KEY = line[0:int(len(_hash) + 5 )]
 					OBJ_LINE = "{a} --> {b}\n".format(a = _hash, b = newkey)
 					
-					existent_lines.append(OBJ_LINE)
-
 					oldkey = line[int(len(_hash) + 5):-1]
+
+					existent_lines.append(OBJ_LINE)
 				else:
 					existent_lines.append(line)
 
-			f_db.close() 	# Una vez finalzado el almacenamiento de cierra el enlace
+			f_db.close()	# Una vez finalzado el almacenamiento de cierra el enlace
 
 			file_lines = "".join(existent_lines)
 
@@ -182,6 +182,7 @@ def update (hash, newkey):
 			_db = open("Xkeydb0.xrk", "w")
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
+			
 			import trash
 			trash.garbageCollector('file:Xkeydb0.xrk')
 			
@@ -191,12 +192,13 @@ def update (hash, newkey):
 
 			os.chdir(actual_dir)
 
-			print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldkey, b = newkey))
+			if oldkey != newkey:
+				print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldkey, b = newkey))
 
 
 # Funcion terminada
 def saveKeys(keyvalue):
-	"""Guarda en un archivo de texto plano la llave criptografica"""
+	"""Guarda en un archivo de texto plano la llave criptografica asociada a su hash correspondiente"""
 	file = open("MyProjectKey.txt", "w")
 	file.write(str(keyvalue))
 	file.close()

@@ -1,7 +1,7 @@
 from io import open
 import hashlib
-import crypto
 import os
+import crypto
 import DBmanipulate
 
 # VALORES DE ENCRIPTACION N3 (E_N3)
@@ -21,7 +21,6 @@ def validation_key (key):
 	os.chdir(_path)
 
 	key_status = False
-	print("------key: {}***".format(key))
 
 	dblink = open("Xkeydb0.xrk", "r")
 	keyOnLine = ""
@@ -40,17 +39,12 @@ def validation_key (key):
 		limit = int(len(keyOnLine) / 4)
 		publ_dbkey.append(keyOnLine[:limit])
 
-	print(priv_dbkey)
-	print(publ_dbkey)
-
 	if key in priv_dbkey:
 		key_status = True
-		print("LA LLAVE SI EXISTE")
 	elif key in publ_dbkey:
 		key_status = True
-		print("LA LLAVE SI EXISTE")
 	else:
-		print("LA LLAVE NO EXISTE")
+		key_status = False
 
 	# Nos retornamos al directorio raiz
 	actual_dir = str(os.getcwd())
@@ -170,13 +164,20 @@ def update (msg, newhash):
 
 			os.chdir(actual_dir)
 
-			print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldhash, b = newhash))
+			# # BUG: ENCONTRAR EL PINCHE EROR
+			if oldhash == newhash:
+				print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldhash, b = newhash))
 
 
 
 # # NOTE: funcion terminada
 def hash_msg_gen (message):
 	"""GENERA UN HASH UNICO PARA CADA MENSAJE"""
+
+	# Hay que convertir de lista a cadena para poder manejarla
+	if isinstance(message ,list) == True:
+		message = str("".join(message))
+
 	if isinstance(message, str) == True:
 		if len(message) >= 1:
 			message = str(message.split())
@@ -185,12 +186,14 @@ def hash_msg_gen (message):
 			output = output[20:-1]
 
 			return output
+	else:
+		print("ERROR - THE TYPE OF DATA IS WRONG. {}".format(type(message)))
 
 
 
 # # NOTE: funcion terminada
 def encode (message, keystatus):
-	"""CODIFICA EL MENSAJE RECIBIDO"""
+	"""CODIFICA LOS MENSAJES RECIBIDOS"""
 
 	if keystatus == True and type(message) != None:
 
@@ -284,7 +287,7 @@ def encode (message, keystatus):
 
 # # NOTE: funcion terminada 
 def decode (message, keystatus):
-	"""DECODIFICA EL MENSAJES RECIBIDOS"""
+	"""DECODIFICA LOS MENSAJES RECIBIDOS"""
 
 	if keystatus == True and type(message) != None:
 
