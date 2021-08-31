@@ -54,7 +54,6 @@ def validation_key (key):
 	return key_status
 
 
-
 # # NOTE: funcion terminada
 def savedbMsg (msg, ahash):
 	"""GUARDA EL MENSAJE ASOCIADO A SU HASH EN LA BD"""
