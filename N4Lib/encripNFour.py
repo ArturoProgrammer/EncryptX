@@ -54,7 +54,6 @@ def validation_key (key):
 	return key_status
 
 
-
 # # NOTE: funcion terminada
 def savedbMsg (msg, ahash):
 	"""GUARDA EL MENSAJE ASOCIADO A SU HASH EN LA BD"""
@@ -125,6 +124,7 @@ def update (msg, newhash):
 			_db = open("Xmsgdb1.xrk", "w")
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
+			
 			import trash
 			trash.garbageCollector('file:Xmsgdb1.xrk')
 			
@@ -164,8 +164,7 @@ def update (msg, newhash):
 
 			os.chdir(actual_dir)
 
-			# # BUG: ENCONTRAR EL PINCHE EROR
-			if oldhash == newhash:
+			if oldhash != newhash:
 				print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldhash, b = newhash))
 
 
@@ -174,18 +173,20 @@ def update (msg, newhash):
 def hash_msg_gen (message):
 	"""GENERA UN HASH UNICO PARA CADA MENSAJE"""
 
+	
 	# Hay que convertir de lista a cadena para poder manejarla
-	if isinstance(message ,list) == True:
+	if isinstance(message, list) == True:
 		message = str("".join(message))
+		
+	elif isinstance(message, list) == False: 
+		if isinstance(message, str) == True:
+			if len(message) >= 1:
+				message = str(message.split())
+				output = hashlib.sha256(message.encode("utf-8"))
+				output = str(output)
+				output = output[20:-1]
 
-	if isinstance(message, str) == True:
-		if len(message) >= 1:
-			message = str(message.split())
-			output = hashlib.sha256(message.encode("utf-8"))
-			output = str(output)
-			output = output[20:-1]
-
-			return output
+				return output
 	else:
 		print("ERROR - THE TYPE OF DATA IS WRONG. {}".format(type(message)))
 

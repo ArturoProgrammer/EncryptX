@@ -7,27 +7,25 @@ f_io = open("ejemplo.txt", "r")
 
 encripNFour.module_help()
 
-i = 25536782
+
 
 key_password = key_generator.gen_privkey(64)
-#key_password = '9ac23cb8ec74b0e5542005e8a800043257eecf884250bc641e76c96bd49442f8'
 pubkey = key_generator.gen_publickey(key_password)
 
 
-#x = encripNFour.hash_msg_gen(f_io.readlines())	# MENSAJE NO ENCRIPTADO
-x = i
-#x = "@ 0x7f1ca150ac38"
-print(x)
+
+anyndata = "".join(f_io.readlines())
+x = encripNFour.hash_msg_gen(anyndata)	# MENSAJE NO ENCRIPTADO
+
 # SE GUARDA LA LLAVE PRIVADA Y EL HASH EN LA DB
-key_generator.savedbKey(key_password, x)
+i = key_generator.savedbKey(key_password, x)
 
-
-#encrip_msg = encripNFour.encode(f_io.readlines(), encripNFour.validation_key(key_password))
-encrip_msg = "KVES"
-print("\nHASH DE LLAVE: {}".format(x))
+# SE ENCRIPTA EL MENSAJE
+encrip_msg = encripNFour.encode(anyndata, encripNFour.validation_key(key_password))
 
 # SE GUARDA EL MENSAJE Y EL HASH EN LA DB
 encripNFour.savedbMsg(encrip_msg, x)
+
 
 f_io.close()	# SE CIERRA EL ARCHIVO. TODOS LOS DATOS YA ESTAN ALAMCENADOS EN EL PROGRAMA LOCAL
 

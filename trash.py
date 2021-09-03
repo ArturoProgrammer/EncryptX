@@ -20,6 +20,9 @@ def garbageCollector (file):
 				None
 		dbfile.close()
 		
+		print(_lines)
+		print(_linescount)
+
 		f_db = open(file, "w")
 		
 		filelines = _linescount.keys()

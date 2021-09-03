@@ -103,7 +103,18 @@ def gen_publickey(keyval):
 
 # Funcion termianda
 def savedbKey (key, hash):
-	"""Guarda la llave y su hash asociado en la BD"""
+	"""
+	Guarda la llave y su hash asociado en la BD
+	
+	Argumentos:
+	Key [Str]
+	HASH [Str]
+	"""
+
+	# COMPROBACION DE RECEPCION DE ARGUMENTOS -> VERDADERO
+	#print("LLAVE: {a}\nHASH: {b}".format(a = key, b = hash))
+
+
 	if hash != None:
 		directory = ".master/.access/dkcache/"
 		
@@ -113,7 +124,6 @@ def savedbKey (key, hash):
 			dbfile = open("Xkeydb0.xrk", "a")
 
 			DIC_LINE = "{b} --> {a}\n".format(a = key, b = hash)
-
 			dbfile.write(DIC_LINE)
 			dbfile.close()
 
@@ -129,7 +139,7 @@ def savedbKey (key, hash):
 
 			os.mkdir(root_1)
 			os.chdir(root_1)
-			os.mkdir(root_2)
+			os.mkdir(root_2) 
 			os.chdir(root_2)
 			os.mkdir(root_3)
 			os.chdir(root_3)
