@@ -20,6 +20,9 @@ def garbageCollector (file):
 				None
 		dbfile.close()
 		
+		print(_lines)
+		print(_linescount)
+
 		f_db = open(file, "w")
 		
 		filelines = _linescount.keys()
@@ -28,7 +31,7 @@ def garbageCollector (file):
 		
 		# Segundo proceso de limpieza - por repeticion de mensaje
 	
-	elif file == "Xkeydb0.xrkc":
+	elif file == "Xkeydb0.xrk":
 		# Tercer proceso de limpieza - por repeticion de hash (Key DB)
 		_lines 		= 0		# numero total de lineas 					=> Enteros
 		_linesdir	= {}	# {'n. linea' : 'contenido de linea'}	=> Cadenas y Enteros

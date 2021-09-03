@@ -124,6 +124,7 @@ def update (msg, newhash):
 			_db = open("Xmsgdb1.xrk", "w")
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
+			
 			import trash
 			trash.garbageCollector('file:Xmsgdb1.xrk')
 			
@@ -162,10 +163,6 @@ def update (msg, newhash):
 			actual_dir = actual_dir[:-23]
 
 			os.chdir(actual_dir)
-
-			# # BUG: ENCONTRAR EL PINCHE ERROR
-			print("HASH VIEJO: " + oldhash)
-			print("HASH NUEVO: " + newhash)
 
 			if oldhash != newhash:
 				print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldhash, b = newhash))
