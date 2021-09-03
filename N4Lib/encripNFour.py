@@ -163,8 +163,11 @@ def update (msg, newhash):
 
 			os.chdir(actual_dir)
 
-			# # BUG: ENCONTRAR EL PINCHE EROR
-			if oldhash == newhash:
+			# # BUG: ENCONTRAR EL PINCHE ERROR
+			print("HASH VIEJO: " + oldhash)
+			print("HASH NUEVO: " + newhash)
+
+			if oldhash != newhash:
 				print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldhash, b = newhash))
 
 
@@ -173,18 +176,20 @@ def update (msg, newhash):
 def hash_msg_gen (message):
 	"""GENERA UN HASH UNICO PARA CADA MENSAJE"""
 
+	
 	# Hay que convertir de lista a cadena para poder manejarla
-	if isinstance(message ,list) == True:
+	if isinstance(message, list) == True:
 		message = str("".join(message))
+		
+	elif isinstance(message, list) == False: 
+		if isinstance(message, str) == True:
+			if len(message) >= 1:
+				message = str(message.split())
+				output = hashlib.sha256(message.encode("utf-8"))
+				output = str(output)
+				output = output[20:-1]
 
-	if isinstance(message, str) == True:
-		if len(message) >= 1:
-			message = str(message.split())
-			output = hashlib.sha256(message.encode("utf-8"))
-			output = str(output)
-			output = output[20:-1]
-
-			return output
+				return output
 	else:
 		print("ERROR - THE TYPE OF DATA IS WRONG. {}".format(type(message)))
 
