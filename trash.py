@@ -1,72 +1,110 @@
 import io
+from sys import argv
+
 
 def garbageCollector (file):
-	"""Elimina las coincidencias de una misma cadena de mensaje en el mismo archivo"""
+	"""Elimina las coincidencias de una misma cadena de datos en el mismo archivo"""
 	file = file[5:]
 
 	dbfile = io.open(file, "r")
 
 	if file == "Xmsgdb1.xrk":
-		# Primer proceso de limpieza - por repeticion de linea
-		_lines = 0
-		_linescount = {}
-		plus = lambda line: _linescount.get(line) + 1
+		# Primer proceso - 	repeticion de linea
+		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
+		_message_DIR	= {}	# { Linea : N. Coincidencias }
 
-		for line_lecture in dbfile.readlines():
-			_lines += 1
-			if len(line_lecture) > 1:
-				_linescount[line_lecture] = 1
-			else:
-				None
+		DB_RD = dbfile.readlines()
 		dbfile.close()
-		
-		print(_lines)
-		print(_linescount)
 
-		f_db = open(file, "w")
+		for a_line in DB_RD:
+			# Contador inicial de coincidencias -> 1
+			if a_line in DB_RD:
+				_message_DIR[a_line] = 1
+
+		# GUARDADO DE RESULTADOS
+		new_file = open(file, "w+")
 		
-		filelines = _linescount.keys()
-		f_db.write("".join(filelines))
-		f_db.close()
-		
-		# Segundo proceso de limpieza - por repeticion de mensaje
-	
+		for i in _message_DIR:
+			_lines.append(i)		
+
+		new_file.write("".join(_lines))
+		new_file.close()
+
+		# Segundo proceso - por repeticion de HASH
+		_HASH_lines	=	{}	# { mensaje : HASH }
+		_HASHES		= 	[]	# Lista con los haches existentes
+
+
+
+
+
 	elif file == "Xkeydb0.xrk":
 		# Tercer proceso de limpieza - por repeticion de hash (Key DB)
-		_lines 		= 0		# numero total de lineas 					=> Enteros
-		_linesdir	= {}	# {'n. linea' : 'contenido de linea'}	=> Cadenas y Enteros
-		_hashline 	= {}	# {'hash' : 'resto de linea'}		=> Cadenas
-		_hashes		= []	# ['hash NO repetido']						=> Cadenas
+		# Primer proceso - 	repeticion de linea
 
-		for line_lecture in dbfile.readlines():
-			_lines += 1
-			if len(line_lecture) > 1:
-				delimeter	= " --> "
-				del_index	= line_lecture.find(delimeter)
-				LINE_HASH 	= line_lecture[0:del_index]
+		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
+		_message_DIR	= {}	# { Linea : N. Coincidencias }
 
-				_linesdir[_lines] = line_lecture
-
-				if not LINE_HASH in _hashes:
-					_hashes.append(LINE_HASH)
-					lineval = line_lecture[del_index:]
-					_hashline[LINE_HASH] = '{b}'.format(b = lineval)
-		key 	= ""
-		value 	= ""
-		fal_txt	= []
-
-		for i in _hashes:
-			key 	= i
-			value 	= _hashline[i]
-
-			OBJ_LINE = "{a}{b}".format(a = key, b = value)
-			fal_txt.append(OBJ_LINE)
-		"""
-		Si no esta registrado, añades la linea a la lista
-		Si ya esta registrado, añades a la lista la primer linea con ese hash registrado
-		"""
+		DB_RD = dbfile.readlines()
 		dbfile.close()
 
-		f_db = open(file, "w")
-		f_db.write("".join(fal_txt))
-		f_db.close()
+		for a_line in DB_RD:
+			# Contador inicial de coincidencias -> 1
+			if a_line in DB_RD:
+				_message_DIR[a_line] = 1
+
+		# GUARDADO DE RESULTADOS
+		new_file = open(file, "w+")
+		
+		for i in _message_DIR:
+			_lines.append(i)		
+
+		new_file.write("".join(_lines))
+		new_file.close()
+
+
+
+	elif file == "DB_test.xrk":	
+		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
+		_message_DIR	= {}	# { Linea : N. Coincidencias }
+
+		DB_RD = dbfile.readlines()
+		dbfile.close()
+
+		for a_line in DB_RD:
+			# Contador inicial de coincidencias -> 1
+			if a_line in DB_RD:
+				_message_DIR[a_line] = 1
+
+		# GUARDADO DE RESULTADOS
+		new_file = open("RESULTADOS.txt", "w+")
+		
+		for i in _message_DIR:
+			_lines.append(i)		
+
+		new_file.write("".join(_lines))
+		new_file.close()
+
+
+		_Line_DICT	=	{}	# { mensaje : HASH }
+		_HASHES		= 	[]	# Lista con los hashes existentes
+
+		for line in DB_RD:
+			_message 	= line[0:line.find("-->")]			# Detector del mensaje / Todo entre los corchetes (listas)
+			_HASH 		= line[int(line.find("-->") + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
+
+
+			print(_message)
+			print(_HASH)
+
+			_Line_DICT[_message] = _HASH
+		print(_Line_DICT)
+
+def synchronizer (file):
+	"""
+	Sincroniza las todas las bases de datos para evitar la acumulacion de hashes inexistentes en el resto de bases.
+	"""
+	pass
+
+if __name__ == '__main__':
+	garbageCollector(argv[1])

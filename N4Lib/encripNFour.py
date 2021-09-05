@@ -16,7 +16,7 @@ class KeyDB(DBmanipulate.DB):
 
 # # WARNING: PRIMERO SE DEBE CONCLUIR LOS METODOS RELACIONADOS A LA MANIPULACION DE DB
 def validation_key (key):
-	"""VERIFICA LA VALIDEZ DE UNA LLAVE"""
+	"""VERIFICA LA VALIDEZ DE UNA LLAVE, EN LA DB"""
 	_path = ".master/.access/dkcache/"
 	os.chdir(_path)
 
@@ -125,6 +125,8 @@ def update (msg, newhash):
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
 			
+
+			# # NOTE: Garbage Collector no funciona - solucionar en trash.py
 			import trash
 			trash.garbageCollector('file:Xmsgdb1.xrk')
 			

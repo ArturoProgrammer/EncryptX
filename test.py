@@ -15,6 +15,7 @@ pubkey = key_generator.gen_publickey(key_password)
 
 
 anyndata = "".join(f_io.readlines())
+""""anyndata = "HOLA"""
 x = encripNFour.hash_msg_gen(anyndata)	# MENSAJE NO ENCRIPTADO
 
 # SE GUARDA LA LLAVE PRIVADA Y EL HASH EN LA DB
