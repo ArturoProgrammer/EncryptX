@@ -1,14 +1,40 @@
 import io
+from sys import argv
+
 
 def garbageCollector (file):
-	"""Elimina las coincidencias de una misma cadena de mensaje en el mismo archivo"""
+	"""Elimina las coincidencias de una misma cadena de datos en el mismo archivo"""
 	file = file[5:]
 
 	dbfile = io.open(file, "r")
 
 	if file == "Xmsgdb1.xrk":
-		# Primer proceso de limpieza - por repeticion de linea
-		_lines = 0
+		# Primer proceso - 	repeticion de linea
+
+		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
+		_message_DIR	= {}	# { Linea : N. Coincidencias }
+
+		DB_RD = dbfile.readlines()
+		dbfile.close()
+
+		for a_line in DB_RD:
+			print(a_line)	
+			# Contador inicial de coincidencias -> 1
+			if a_line in DB_RD:
+				_message_DIR[a_line] = 1
+
+		# GUARDADO DE RESULTADOS
+		new_file = open(file, "w+")
+		
+		for i in _message_DIR:
+			_lines.append(i)		
+
+		new_file.write("".join(_lines))
+		new_file.close()
+
+
+		"""
+		_lines = -1
 		_linescount = {}
 		plus = lambda line: _linescount.get(line) + 1
 
@@ -23,16 +49,26 @@ def garbageCollector (file):
 		print(_lines)
 		print(_linescount)
 
-		f_db = open(file, "w")
+		f_db = open(file, "a")
 		
 		filelines = _linescount.keys()
 		f_db.write("".join(filelines))
 		f_db.close()
-		
-		# Segundo proceso de limpieza - por repeticion de mensaje
-	
+		"""
+
+
+
+		# Segundo proceso - por repeticion de HASH
+
+
 	elif file == "Xkeydb0.xrk":
 		# Tercer proceso de limpieza - por repeticion de hash (Key DB)
+
+		"""
+		# CODIGO ELIMINADO POR BUGS Y MAL FUNCIONAMIENTO
+		"""
+
+		"""
 		_lines 		= 0		# numero total de lineas 					=> Enteros
 		_linesdir	= {}	# {'n. linea' : 'contenido de linea'}	=> Cadenas y Enteros
 		_hashline 	= {}	# {'hash' : 'resto de linea'}		=> Cadenas
@@ -61,12 +97,38 @@ def garbageCollector (file):
 
 			OBJ_LINE = "{a}{b}".format(a = key, b = value)
 			fal_txt.append(OBJ_LINE)
-		"""
-		Si no esta registrado, añades la linea a la lista
-		Si ya esta registrado, añades a la lista la primer linea con ese hash registrado
+
+			#Si no esta registrado, añades la linea a la lista
+			#Si ya esta registrado, añades a la lista la primer linea con ese hash registrado
+		dbfile.close()
+
+		f_db = open(file, "a")
+		f_db.write("".join(fal_txt))
+		f_db.close()
 		"""
 		dbfile.close()
 
-		f_db = open(file, "w")
-		f_db.write("".join(fal_txt))
-		f_db.close()
+	elif file == "DB_test.xrk":	
+		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
+		_message_DIR	= {}	# { Linea : N. Coincidencias }
+
+		DB_RD = dbfile.readlines()
+		dbfile.close()
+
+		for a_line in DB_RD:
+			# Contador inicial de coincidencias -> 1
+			if a_line in DB_RD:
+				_message_DIR[a_line] = 1
+
+		# GUARDADO DE RESULTADOS
+		new_file = open("RESULTADOS.txt", "w+")
+		
+		for i in _message_DIR:
+			_lines.append(i)		
+
+		new_file.write("".join(_lines))
+		new_file.close()
+
+
+if __name__ == '__main__':
+	garbageCollector(argv[1])

@@ -125,6 +125,8 @@ def update (msg, newhash):
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
 			
+
+			# # NOTE: Garbage Collector no funciona - solucionar en trash.py
 			import trash
 			trash.garbageCollector('file:Xmsgdb1.xrk')
 			
