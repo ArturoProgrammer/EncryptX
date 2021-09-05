@@ -63,8 +63,9 @@ def garbageCollector (file):
 		new_file.close()
 
 
-
+	# ARCHIVO DE PRUEBA - ELIMINAR CUANDO SEA NECESARIO
 	elif file == "DB_test.xrk":	
+		# *** Primer proceso - Lineas duplicadas *** #
 		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
 		_message_DIR	= {}	# { Linea : N. Coincidencias }
 
@@ -77,7 +78,7 @@ def garbageCollector (file):
 				_message_DIR[a_line] = 1
 
 		# GUARDADO DE RESULTADOS
-		new_file = open("RESULTADOS.txt", "w+")
+		new_file = open("RESULTADOS.txt", "w")
 		
 		for i in _message_DIR:
 			_lines.append(i)		
@@ -85,20 +86,49 @@ def garbageCollector (file):
 		new_file.write("".join(_lines))
 		new_file.close()
 
-
+		# *** Segundo proceso - Duplicado de HASH *** #
 		_Line_DICT	=	{}	# { mensaje : HASH }
-		_HASHES		= 	[]	# Lista con los hashes existentes
+		_HASHES		= 	[]	# Lista con los hashes existentes (UNICOS)
 
 		for line in DB_RD:
-			_message 	= line[0:line.find("-->")]			# Detector del mensaje / Todo entre los corchetes (listas)
-			_HASH 		= line[int(line.find("-->") + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
-
-
-			print(_message)
-			print(_HASH)
+			delimeter	= " -->"
+			_message 	= line[0:line.find(delimeter)]			# Detector del mensaje / Todo entre los corchetes (listas)
+			_HASH 		= line[int(line.find(delimeter) + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
 
 			_Line_DICT[_message] = _HASH
-		print(_Line_DICT)
+
+			if not _HASH in _HASHES:
+				_HASHES.append(_HASH)	# Se almacenan el HASH sin repeticion
+
+		# # NOTE: AÑADIR GUARDADO DE RESULTADOS / REESCRITURA DE ARCHIVO
+		# GUARDADO DE RESULTADOS
+		new_file = open("RESULTADOS.txt", "w")
+		
+		for i in _message_DIR:
+			_lines.append(i)		
+
+		new_file.write("".join(_lines))
+		new_file.close()
+
+		# *** Tercer proceso - Mensaje duplicado *** #
+		_Message_LIST	= 	[]	# Lista con los mensajes
+		_LineToWrite	=	{}	# Diccionario listo para escritura
+
+		for line in DB_RD:
+			delimeter	= " -->"
+			_MsgOnLine	= line[0:line.find(delimeter)]	# Detector del mensaje en la linea
+			_Message_LIST.append(_MsgOnLine)
+
+		for msg in _Message_LIST:
+			_LineToWrite[msg] = "HASH"
+
+		counter	= -1
+		for key in _LineToWrite:
+			counter += 1
+			_LineToWrite[key] = _HASHES[counter]
+		
+		print(_LineToWrite)
+
 
 def synchronizer (file):
 	"""
