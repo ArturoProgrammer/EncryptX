@@ -16,7 +16,7 @@ class KeyDB(DBmanipulate.DB):
 
 # # WARNING: PRIMERO SE DEBE CONCLUIR LOS METODOS RELACIONADOS A LA MANIPULACION DE DB
 def validation_key (key):
-	"""VERIFICA LA VALIDEZ DE UNA LLAVE"""
+	"""VERIFICA LA VALIDEZ DE UNA LLAVE, EN LA DB"""
 	_path = ".master/.access/dkcache/"
 	os.chdir(_path)
 
