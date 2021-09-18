@@ -2,6 +2,66 @@ import io
 from sys import argv
 
 
+# *** FUNCIONES PRIVADAS ***#
+def _match_eliminator (c_dict, h_list, coinc, index = None):
+	# ELIMINA LAS COINCIDENCIAS ENCONTRADAS Y RETORNA UNA LISTA LIMPIA
+	
+	# c_dict 	- 	{}		diccionario con el contenido de { mensaje : hash }
+	# h_list	-	[]		hashes disponibles (sin coincidencias)
+	# coinc 	- 	[] 		mensajes asociados al mismo hash	
+	# index 	-	int 	indice de lista (elemento a dejar intacto)
+	# result 	-	{}		diccionario resultante final
+
+	FINAL_RESULT = {}
+
+	if index == None:
+		# ELIMINA TODAS LAS COINCIDENCIAS Y EL HASH CORRESPONDIENTE
+		for keyToDel in coinc:
+			c_dict.pop(keyToDel)
+
+		FINAL_RESULT = c_dict
+
+	elif index != None:
+		# ELIMINA TODAS LAS COINCIDENCIAS EXCEPTO LA ELEGIDA
+		COIN_SAVED	=	coinc[int(index - 1)]
+
+		print(COIN_SAVED, isinstance(COIN_SAVED, str))
+		print(coinc, isinstance(coinc, list))
+
+		for i in coinc:
+			print(i)
+
+		print(coinc.remove(COIN_SAVED))
+
+
+	"""
+	for i in c_dict:
+		print(i)
+	"""
+
+	return FINAL_RESULT
+
+
+
+
+def _match_ignore ():
+	# IGNORAR COINCIDENCIAS
+	print("IGNORANDO COINCIDENCIAS")
+	q_req = input("SI SE ENCUENTRA EL MISMO HASH ASOCIADO A MAS DE UN MENSAJE, CAUSA UN MAL FUNCIONAMIENTO EN EL SISTEMA\nSEGURO QUE DESEA IGNORAR LAS COINCIDENCIAS? (Y/n) ")
+
+	if q_req.upper() == "Y":
+		# IGNORAR COINCIDENCIAS
+		print("IGNORANDO COINCIDENCIAS")
+	elif q_req.upper() == "N":
+		# ELIMINA LAS COINCIDENCIAS
+		print("ELIMINANDO COINCIDENCIAS")
+	else:
+		print("IGNORANDO")
+
+
+
+# *** FUNCIONES PUBLICAS *** #
+
 def garbageCollector (file):
 	"""Elimina las coincidencias de una misma cadena de datos en el mismo archivo"""
 	file = file[5:]
@@ -63,6 +123,8 @@ def garbageCollector (file):
 		new_file.close()
 
 
+
+
 	# ARCHIVO DE PRUEBA - ELIMINAR CUANDO SEA NECESARIO
 	elif file == "DB_test.xrk":	
 		# *** Primer proceso - Lineas duplicadas *** #
@@ -78,7 +140,7 @@ def garbageCollector (file):
 				_message_DIR[a_line] = 1
 
 		# GUARDADO DE RESULTADOS
-		new_file = open("RESULTADOS.txt", "w")
+		new_file	=	open("RESULTADOS.txt", "w")
 		
 		for i in _message_DIR:
 			_lines.append(i)
@@ -97,51 +159,59 @@ def garbageCollector (file):
 		reopen_fileACT	= reopen_file.readlines()
 
 		for line in reopen_fileACT:
-			delimeter	= " -->"
-			_message 	= line[0:line.find(delimeter)]			# Detector del mensaje / Todo entre los corchetes (listas)
-			_HASH 		= line[int(line.find(delimeter) + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
+			delimeter	=	" -->"
+			_message 	=	line[0:line.find(delimeter)]			# Detector del mensaje / Todo entre los corchetes (listas)
+			_HASH 		=	line[int(line.find(delimeter) + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
+			_H_Counter	=	0										# Contador de coincidencias
+			coin_list	=	[] # LISTA DE COINCIDENCIAS
 
 			_Line_DICT[_message] = _HASH
 
 			if not _HASH in _HASHES:
 				_HASHES.append(_HASH)	# Se almacenan el HASH sin repeticion
+			else:
 
-		print(_HASHES)
-		print(_Line_DICT)
+				for value in _Line_DICT:
+					if _HASH == _Line_DICT[value]:
+						#print(value)
+						_H_Counter 	+= 	1
+						coin_list.append(value)
+
+		message_u = str("".join(coin_list))
+		print("EL HASH {a} SE REPITE {n} VECES. ASOCIADO A: {m_c}".format(a = _HASH[:-1], n = _H_Counter, m_c = message_u))
+		opt	= input("QUE MENSAJE DESEA DEJAR ASOCIADO AL HASH {a}? (P. Ej.: 1 en caso de {msg_sel}/A para eliminar todas las coincidencias/I para ignorar): ".format(a = _HASH[:-1], msg_sel = coin_list[0]))
+
+
+		if opt.upper() == "A" or opt.upper() == "I":
+			if opt.upper() == "A":
+				# BORRADO DE TODAS LAS COINCIDENCIAS
+				_match_eliminator(_Line_DICT, _HASHES, coin_list)
+			if opt.upper() == "I":
+				# IGNORAR COINCIDENCIAS
+				_match_ignore()
+		else:
+			try:
+				opt = int(opt)
+			except ValueError as e:
+				# IGNORAR COINCIDENCIAS
+				_match_ignore()
+
+			else:
+				# ELIMINA COINCIDENCIAS NO SELECCIONADAS
+				try:
+					msg_select = coin_list[opt - 1]	
+				except IndexError as e:
+					print("SIN COINCIDENCIAS ENCONTRADAS EN LISTA")
+				else:
+					print(coin_list[opt - 1])
+					print("ELIMINANDO COINCIDENCIAS.\nDEJANDO EN PIE ASOCIACION: {b} --> {a}".format(a = _HASH[:-1], b = msg_select))
+					_match_eliminator(_Line_DICT, _HASHES, coin_list, index = opt)
+
+		#print(_HASHES)
+		#print(_Line_DICT)
 		reopen_file.close()
 
-		"""
-		# # NOTE: AÑADIR GUARDADO DE RESULTADOS / REESCRITURA DE ARCHIVO
-		# GUARDADO DE RESULTADOS
-		new_file = open(MK_FILE, "w")
 
-		for i in _message_DIR:
-			_lines.append(i)		
-
-		new_file.write(str("".join(_lines)))
-		print(str("".join(_lines)))
-		new_file.close()
-
-
-		# *** Tercer proceso - Mensaje duplicado *** #
-		_Message_LIST	= 	[]	# Lista con los mensajes
-		_LineToWrite	=	{}	# Diccionario listo para escritura
-
-		for line in DB_RD:
-			delimeter	= " -->"
-			_MsgOnLine	= line[0:line.find(delimeter)]	# Detector del mensaje en la linea
-			_Message_LIST.append(_MsgOnLine)
-
-		for msg in _Message_LIST:
-			_LineToWrite[msg] = "HASH"
-
-		counter	= -1
-		for key in _LineToWrite:
-			counter += 1
-			_LineToWrite[key] = _HASHES[counter]
-		
-		print(_LineToWrite)
-		"""
 
 def synchronizer (file):
 	"""
