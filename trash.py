@@ -81,16 +81,22 @@ def garbageCollector (file):
 		new_file = open("RESULTADOS.txt", "w")
 		
 		for i in _message_DIR:
-			_lines.append(i)		
+			_lines.append(i)
+
 
 		new_file.write("".join(_lines))
 		new_file.close()
+
 
 		# *** Segundo proceso - Duplicado de HASH *** #
 		_Line_DICT	=	{}	# { mensaje : HASH }
 		_HASHES		= 	[]	# Lista con los hashes existentes (UNICOS)
 
-		for line in DB_RD:
+		MK_FILE			= "RESULTADOS.txt"
+		reopen_file		= open(MK_FILE, "r")
+		reopen_fileACT	= reopen_file.readlines()
+
+		for line in reopen_fileACT:
 			delimeter	= " -->"
 			_message 	= line[0:line.find(delimeter)]			# Detector del mensaje / Todo entre los corchetes (listas)
 			_HASH 		= line[int(line.find(delimeter) + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
@@ -100,15 +106,22 @@ def garbageCollector (file):
 			if not _HASH in _HASHES:
 				_HASHES.append(_HASH)	# Se almacenan el HASH sin repeticion
 
+		print(_HASHES)
+		print(_Line_DICT)
+		reopen_file.close()
+
+		"""
 		# # NOTE: AÑADIR GUARDADO DE RESULTADOS / REESCRITURA DE ARCHIVO
 		# GUARDADO DE RESULTADOS
-		new_file = open("RESULTADOS.txt", "w")
-		
+		new_file = open(MK_FILE, "w")
+
 		for i in _message_DIR:
 			_lines.append(i)		
 
-		new_file.write("".join(_lines))
+		new_file.write(str("".join(_lines)))
+		print(str("".join(_lines)))
 		new_file.close()
+
 
 		# *** Tercer proceso - Mensaje duplicado *** #
 		_Message_LIST	= 	[]	# Lista con los mensajes
@@ -128,7 +141,7 @@ def garbageCollector (file):
 			_LineToWrite[key] = _HASHES[counter]
 		
 		print(_LineToWrite)
-
+		"""
 
 def synchronizer (file):
 	"""
