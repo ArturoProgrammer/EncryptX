@@ -152,6 +152,7 @@ def savedbKey (key, hash):
 			dbfile.close()
 			
 			trash.garbageCollector('file:Xkeydb0.xrk')
+			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
 			
 			# Nos retornamos al directorio raiz
 			actual_dir = str(os.getcwd())
@@ -195,7 +196,8 @@ def update (hash, newkey):
 			
 			import trash
 			trash.garbageCollector('file:Xkeydb0.xrk')
-			
+			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
+
 			# Nos retornamos al directorio raiz
 			actual_dir = str(os.getcwd())
 			actual_dir = actual_dir[:-23]

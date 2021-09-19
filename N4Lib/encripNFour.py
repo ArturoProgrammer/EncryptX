@@ -129,7 +129,7 @@ def update (msg, newhash):
 			# # NOTE: Garbage Collector no funciona - solucionar en trash.py
 			import trash
 			trash.garbageCollector('file:Xmsgdb1.xrk')
-			
+			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
 
 			# PROCESO DE ACTUALIZACION EN KEY DB
 			k_db 			= open("Xkeydb0.xrk", "r")
@@ -156,9 +156,10 @@ def update (msg, newhash):
 			_kdb = open("Xkeydb0.xrk", "w")
 			_kdb.write(kfile_lines)
 			_kdb.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
+			
 			import trash
 			trash.garbageCollector('file:Xkeydb0.xrk')
-
+			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
 
 			# Nos retornamos al directorio raiz
 			actual_dir = str(os.getcwd())
