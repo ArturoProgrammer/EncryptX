@@ -1,5 +1,6 @@
 import io
 from sys import argv
+import os
 
 
 # *** <== === FUNCIONES PRIVADAS === ==> ***#
@@ -76,6 +77,7 @@ def garbageCollector (file):
 
 	dbfile = io.open(file, "r")
 
+	# *** <== === PROCESOS PARA DB MSG === ==> *** #
 	if file == "Xmsgdb1.xrk":
 		# Primer proceso - 	repeticion de linea
 		_lines 			= []	# Lista con el contenido para concatenar en archivo resultante
@@ -173,7 +175,7 @@ def garbageCollector (file):
 
 
 
-
+	# *** <== === PROCESOS PARA DB KEY === ==> *** #
 	elif file == "Xkeydb0.xrk":
 		# Tercer proceso de limpieza - por repeticion de hash (Key DB)
 		# Primer proceso - 	repeticion de linea
@@ -235,9 +237,9 @@ def garbageCollector (file):
 		reopen_fileACT	= reopen_file.readlines()
 
 		for line in reopen_fileACT:
-			delimeter	=	" -->"
+			delimeter	=	" --> "
 			_message 	=	line[0:line.find(delimeter)]			# Detector del mensaje / Todo entre los corchetes (listas)
-			_HASH 		=	line[int(line.find(delimeter) + 4):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
+			_HASH 		=	line[int(line.find(delimeter) + 5):]	# Detector de HASH / Ejemplo: @ 0xb776b7d0
 			_H_Counter	=	0										# Contador de coincidencias
 			coin_list	=	[] # LISTA DE COINCIDENCIAS
 
@@ -286,7 +288,6 @@ def garbageCollector (file):
 					print("ELIMINANDO COINCIDENCIAS.\nDEJANDO EN PIE ASOCIACION: {b} --> {a}".format(a = _HASH[:-1], b = msg_select))
 					f_dict = _match_eliminator(_Line_DICT, _HASHES, coin_list, index = opt)
 
-		print(f_dict)
 		
 		for msg in f_dict:
 			OBJ_LINE = "{a} --> {b}".format(a = msg, b = f_dict[msg])
@@ -302,11 +303,64 @@ def garbageCollector (file):
 
 
 
-def synchronizer (file):
+
+def synchronizer (msg_db = "", key_db = ""):
+	"""Sincroniza las todas las bases de datos para evitar la acumulacion de hashes inexistentes en el resto de bases."""
+	MSG_DICT	=	{}		# Diccionario de { message : hash }
+	KEY_DICT	=	{}		# Diccionario de { hash : key }
+	delimeter	=	" --> "	# Delimitador
+
+	msg_dbFile		=	open(msg_db, "r")
+	msg_db_content	= 	msg_dbFile.readlines()
+	for line in msg_db_content:
+		_message 	=	line[0:line.find(delimeter)]
+		_hash 		=	line[int(line.find(delimeter) + 5):-1]
+		MSG_DICT[_hash] = _message
+
+	msg_dbFile.close()
+
+	key_dbFile	 	=	open(key_db, "r")
+	key_db_content	=	key_dbFile.readlines()
+	for line in key_db_content:
+		_hash 	=	line[0:line.find(delimeter)]
+		_key 	= 	line[int(line.find(delimeter) + 5):]
+		KEY_DICT[_hash]	= _key
+
+	key_dbFile.close()
+
+	HASH_LIST		=	[]	# Lista con los hashes de la DB Msg a dejar intactos en DB Key
+	NEW_KEY_DICT	=	{}	# Diccionario con { hash : key } sincronizados
+	for i_hash in MSG_DICT:
+		HASH_LIST.append(i_hash)
+
+	for key_hash in KEY_DICT:
+		if key_hash not in MSG_DICT:
+			pass
+		else:
+			NEW_KEY_DICT[key_hash] = KEY_DICT[key_hash]
+
 	"""
-	Sincroniza las todas las bases de datos para evitar la acumulacion de hashes inexistentes en el resto de bases.
+	for hash_in_key in KEY_DICT:
+		#print(hash_in_key)
+		for hash_in_msg in MSG_DICT:
+			#print(hash_in_msg)
+			if hash_in_key == hash_in_msg:
+				print("ENCONTRADO")
+				print(hash_in_key, "", hash_in_msg)
+			else:
+				del KEY_DICT[hash_in_key]
 	"""
-	pass
+
+	file_content = []
+	for i in NEW_KEY_DICT:
+		OBJ_LINE = "{a} --> {b}".format(a = i, b = NEW_KEY_DICT[i])
+		file_content.append(OBJ_LINE)
+
+	dbFileToWrite = open(key_db, "w")
+	dbFileToWrite.write(str("".join(file_content)))
+	dbFileToWrite.close()
+
+
 
 if __name__ == '__main__':
-	garbageCollector(argv[1])
+	synchronizer(msg_db = argv[1], key_db = argv[2])
