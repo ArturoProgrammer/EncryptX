@@ -2,6 +2,8 @@ Version actual: 0.54 (en desarrollo)
 Version estable: 0.51
 
 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    -    Token de Acceso
+comando para subir datos:
+	git push orign dev
 
 BUGS:
 X -> SOLUCIONADO		Y -> PENDIENTE/ EN REPARACION
@@ -26,3 +28,4 @@ Y 1 ** PREPARACION, ADICION Y FINALIZACION DEL "GARBAGE COLLECTOR" PARA EL SISTE
 NOTAS:
 * Añadir contador de consultas -> Garbage Collector: cada vez que se realice una consulta a un HASH existente, incrementara en +1 el contador y aumentara su indice de relevancia
   para que sea mas facil de encontrar en una consulta (similar a una Unidad de Prediccion Especulativa)
+* Caracteres no aceptados: £, ±, æ, ¢ y ¶
