@@ -153,7 +153,7 @@ def savedbKey (key, hash):
 			
 			trash.garbageCollector('file:Xkeydb0.xrk')
 			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
-			
+
 			# Nos retornamos al directorio raiz
 			actual_dir = str(os.getcwd())
 			actual_dir = actual_dir[:-23]
@@ -209,7 +209,7 @@ def update (hash, newkey):
 
 
 # Funcion terminada
-def saveKeys(keyvalue):
+def saveKeyOnFile(keyvalue):
 	"""Guarda en un archivo de texto plano la llave criptografica asociada a su hash correspondiente"""
 	file = open("MyProjectKey.txt", "w")
 	file.write(str(keyvalue))

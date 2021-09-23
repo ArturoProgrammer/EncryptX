@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
+# ARCHIVO CLIENTE DE PRUEBA PARA EL SOFTWARE
+
 from N4Lib import encripNFour
 import key_generator
 
-f_io = open("ejemplo.txt", "r")
+f_io = open("ejemplo.txt", "r")	# EN ESTE CASO ENCRIPTAREMOS EL CONTENIDO DE UN ARCHIVO
 
 encripNFour.module_help()
 
 
-
+# SE GENERAN LAS LLAVES CORRESPONDIENTES
 key_password = key_generator.gen_privkey(64)
 pubkey = key_generator.gen_publickey(key_password)
 
@@ -31,7 +33,7 @@ encripNFour.savedbMsg(encrip_msg, x)
 f_io.close()	# SE CIERRA EL ARCHIVO. TODOS LOS DATOS YA ESTAN ALAMCENADOS EN EL PROGRAMA LOCAL
 
 print("|==> **MENSAJE CODIFICADO Y LLAVE: \n-> {a}\n-> {b}".format(a = encrip_msg, b = key_password))
-key_generator.saveKeys(key_password)
+key_generator.saveKeyOnFile(key_password)	# GUARDA LA LLAVE EN UN ARCHIVO DE TEXTO
 
 print("LONGITUD DE LLAVE PRIVADA: {}".format(len(key_password)))
 

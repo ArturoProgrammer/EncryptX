@@ -195,194 +195,141 @@ def hash_msg_gen (message):
 
 
 
-# # NOTE: funcion terminada
-def encode (message, keystatus):
+
+def decode (message, keystatus):
 	"""CODIFICA LOS MENSAJES RECIBIDOS"""
 
 	if keystatus == True and type(message) != None:
 
 		# LISTA DE CARACTERES ASCII IMPRIMIBLES ADMITIDOS
 		# # NOTE: SI UN CARACTER NO ESTA AQUI, PUEDE QUE EL PROGRAMA AUN ASI FUNCIONE
-		charlist = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-		"n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1",
-		"2", "3", "4", "5", "6", "7", "8", "9", "0","A","B", "C", "D", "E", "F", "G",
-		"H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U",
-		"V", "W", "X", "Y", "Z", ".", "\n", "\t", "!", '"', " ", "#", "%", "$", "&,",
-		"'", "(", ")", "*", "+", ",", "-", "", ":", ";", "<", "=", ">", "?", "@", "[",
-		"]", "^", "_", "`", "{", "|", "}", "~", "¡", "¿"]
+		chars 		=	[]	# Lista con los caracteres de la cadena
+		pair_chars	=	[]	# Caracteres de 'chars' traducidos
+		pair_index	=	0
 
-		# DICCIONARIO DE VALORES DE ENCRIPTACION
-		chardic = { "a" : "s", "b" : "o",  "c" : "p",  "d" : "q",  "e" : "z",  "f" :
-		"n",  "g" : "x",  "h" : "k", "i" : "l", "j" : "y",  "k" : "u",  "l" : "e",
-		"m" : "b",  "n" : "a",  "ñ" : "ñ",  "o" : "v",  "p" : "g",  "q" : "1",  "r" :
-		"3",  "s" : "9", "t" : "7",  "u" : "5",  "v" : "2",  "w" : "4",  "x" : "8", 
-		"y" : "0",  "z" : "6", "1" : "t", "2" : "c", "3" : "d", "4" : "f", "5" : "h",
-		"6" : "i", "7" : "j", "8" : "m", "9" : "r", "0" : "w", "A" : "S", "B" : "O", 
-		"C" : "P",  "D" : "Q",  "E" : "Z",  "F" : "N",  "G" : "X",  "H" : "K", "I" :
-		"L", "J" : "Y",  "K" : "U",  "L" : "E", "M" : "B",  "N" : "A",  "Ñ" : "Ñ", 
-		"O" : "V",  "P" : "G",  "Q" : "1",  "R" : "3",  "S" : "9", "T" : "7",  "U" :
-		"5",  "V" : "2",  "W" : "4",  "X" : "8",  "Y" : "0",  "Z" : "6", "\n" :
-		"\n", "\t" : "\t", "." : ".", " " : " "	}
+		CHARDIC = { "s" : "a", "v" : "b", "2" : "c", "ñ" : "d", "7" : "e", "n" : "f", "p" : "g", 
+		"6" : "h", "z" : "i", "u" : "j", "4" : "k", "r" : "l", "y" : "m", "f" : "n", "d" : "ñ",
+		"9" : "o", "g" : "p", "3" : "q", "l" : "r",  "a" : "s", "8" : "t", "j" : "u", "b" : "v",
+		"1" : "w", "0" : "x", "m" : "y", "i" : "z", "w" : "1", "c" : "2", "q" : "3", "k" : "4", 
+		"5" : "5", "h" : "6", "e" : "7", "t" : "8", "o" : "9", "x" : "0", "\n" : "\n", "\t" : "\t",
+		"¶" : " " }
 
-		chars = []			# LISTA DE CARACTERES ORIGINALES DE TODO EL MENSAJE
-		encodecharc = []	# LISTA DE CARACTERES CODIFICADOS DE TODO EL MENSAJE
+		#print(message)
+		index_counter = 0	# Contador del indice del mensaje
 		
-
-		# EXAMINA Y GUARDA LOS CARACTERES EN SUS RESPECTIVAS LISTAS
-		for line in message:
-			linetext 	= []	# LINEA DE TEXTO ACTUAL
-			charl 		= []	# LISTA DE CARACTERES DE LA LINEA
-
-			linetext.append(line)
-
-			for i in line:
-				"""
-				print(i)
-				"""
-				charl.append(i)
-				chars.append(i)
-
-				"""
-				if i in charlist:
-					print("SE ENCUENTRA EN LA LISTA: {}".format(i))
-				else:
-					print("EL CARACTER: {} \nNO SE ENCUENTRA EN LA LISTA".format(i))
-				"""
-			"""
-			print(chars)
-			print(linetext)
-			print(charl)
-			"""
-
-		# COMIENZA EL PROCESO DE ENCRIPTACION
-
-		"""
-		1 => SE ENCRIPTA EN N4
-		2 => SE ENCRIPTA EN BINARIO
-		3 => SE GENERA y ENCRIPTA LA LLAVE PRIVADAE EN SHA256
-		4 => CODIFICACION FINAL FINAL
-		"""
-
-		for c in chars:
-			if c in chardic:
-				cval = chardic[c]
-				encodecharc.append(cval)
-				"""
-				print("ENCRIPATANDO: {a} -> {b}".format(a = c, b = cval))
-				"""
+		for char in message[pair_index:]:
+			index_counter 	+= 1
+			try:
+				msg_fragment = message[pair_index:]
+				pair_index += 2
+				OBJ_CHAR = str("{a}".format(a = msg_fragment[:2]))
+			except IndexError as e:
+				pass
 			else:
-				encodecharc.append(c)
-		"""
-		print(encodecharc)
-		print("\nMENSAJE ORIGINAL:\n{}".format("".join(chars)))
-		print("\nMENSAJE ENCRIPTADO:\n{}".format("".join(encodecharc)))
-		"""
+				if msg_fragment != "":
+					#print("*", msg_fragment)
+					#print(OBJ_CHAR)
+					pair_chars.append(OBJ_CHAR)
+					index_counter = 0
 
-		# INICIO DE LOS 3 PASOS
-		x = str("".join(encodecharc))			# CARACTERES UNIDOS
-		"""
-		y = hashlib.sha256(x.encode("utf-8"))	# ENCRIPTADO EN SHA-256
-		z = None							# GUARDADO LOCAL DE LA LLAVE CRIPTOGRAFICA
-		"""
-		final_message = x
+		#print(pair_chars)
+
+		DEC_CHARS	= []	# Lista de caracteres modificados
+
+		for i_c in pair_chars:
+			#print(i_c)
+			if i_c[:1] == "±":
+				OBJ_CHAR = CHARDIC[i_c[1:2]].upper()
+				#print("***", OBJ_CHAR)
+				DEC_CHARS.append(OBJ_CHAR)
+			elif i_c[:1] == "£":
+				OBJ_CHAR = CHARDIC[i_c[1:2]].lower()
+				#print("***", OBJ_CHAR)
+				DEC_CHARS.append(OBJ_CHAR)
+			elif i_c == "_¶":
+				OBJ_CHAR = " "
+				#print("***", OBJ_CHAR)
+				DEC_CHARS.append(OBJ_CHAR)
+			elif i_c[:1] == "æ":
+				OBJ_CHAR = "{}".format(i_c[1:2])
+				#print("***", OBJ_CHAR)
+				DEC_CHARS.append(OBJ_CHAR)
+			elif i_c[:1] == "¢":
+				if i_c[1:2] == "n":
+					OBJ_CHAR = "\n"
+					#print("***", OBJ_CHAR)
+					DEC_CHARS.append(OBJ_CHAR)
+				if i_c[1:2] == "t":
+					OBJ_CHAR = "\t"
+					#print("***", OBJ_CHAR)
+					DEC_CHARS.append(OBJ_CHAR)
+			
+		print(DEC_CHARS, "\n")
+		
+		final_message = str("".join(DEC_CHARS))
+		#print(final_message)
 
 		return final_message
 
 
+
 # # NOTE: funcion terminada 
-def decode (message, keystatus):
+def encode (message, keystatus):
 	"""DECODIFICA LOS MENSAJES RECIBIDOS"""
 
 	if keystatus == True and type(message) != None:
 
 		# LISTA DE CARACTERES ASCII IMPRIMIBLES ADMITIDOS
 		# # NOTE: SI UN CARACTER NO ESTA AQUI, PUEDE QUE EL PROGRAMA AUN ASI FUNCIONE
-		charlist = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-		"n", "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1",
-		"2", "3", "4", "5", "6", "7", "8", "9", "0","A","B", "C", "D", "E", "F", "G",
-		"H", "I", "J", "K", "L", "M", "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U",
-		"V", "W", "X", "Y", "Z", ".", "\n", "\t", "!", '"', " ", "#", "%", "$", "&,",
-		"'", "(", ")", "*", "+", ",", "-", "", ":", ";", "<", "=", ">", "?", "@", "[",
-		"]", "^", "_", "`", "{", "|", "}", "~", "¡", "¿"]
+		chars 		=	[]	# Lista con los caracteres de la cadena
+		enc_chars	=	[]	# Caracteres de 'chars' traducidos
 
-		# DICCIONARIO DE VALORES DE ENCRIPTACION
-		chardic = { "s" : "a", "o" : "b",  "p" : "c",  "q" : "d",  "z" : "e",  "n" :
-		"f",  "x" : "g",  "k" : "h", "l" : "i", "y" : "j",  "u" : "k",  "e" : "l",
-		"b" : "m",  "a" : "n",  "ñ" : "ñ",  "v" : "o",  "g" : "p",  "1" : "q",  "3" :
-		"r",  "9" : "s", "7" : "t",  "5" : "u",  "2" : "v",  "4" : "w",  "8" : "x", 
-		"0" : "y",  "6" : "z", "t" : "1", "c" : "2", "d" : "3", "f" : "4", "h" : "5",
-		"i" : "6", "j" : "7", "m" : "8", "r" : "9", "w" : "0", "S" : "A", "O" : "B", 
-		"P" : "C",  "Q" : "D",  "Z" : "E",  "N" : "F",  "X" : "G",  "K" : "H", "L" :
-		"I", "Y" : "J",  "U" : "K",  "E" : "L", "B" : "M",  "A" : "N",  "Ñ" : "Ñ", 
-		"V" : "O",  "G" : "P",  "1" : "Q",  "3" : "R",  "9" : "S", "7" : "T",  "5" :
-		"U",  "2" : "V",  "4" : "W",  "8" : "X",  "0" : "Y",  "6" : "Z", "\n" :
-		"\n", "\t" : "\t", "." : ".", " " : " "	}
+		CHARDIC = { "a" : "s", "b" : "v", "c" : "2", "d" : "ñ", "e" : "7", "f" : "n", "g" : "p", 
+		"h" : "6", "i" : "z", "j" : "u", "k" : "4", "l" : "r", "m" : "y", "n" : "f" ,"ñ" : "d",
+		"o" : "9", "p" : "g", "q" : "3", "r" : "l",  "s" : "a", "t" : "8", "u" : "j", "v" : "b",
+		"w" : "1", "x" : "0", "y" : "m", "z" : "i", "1" : "w", "2" : "c", "3" : "q", "4" : "k", 
+		"5" : "5", "6" : "h", "7" : "e", "8" : "t", "9" : "o", "0" : "x", "\n" : "æn", "\t" : "æt",
+		" " : "¶" }
 
-		chars = []			# LISTA DE CARACTERES ORIGINALES DE TODO EL MENSAJE
-		encodecharc = []	# LISTA DE CARACTERES CODIFICADOS DE TODO EL MENSAJE
-		
+		for i in message:
+			chars.append(i)
+		#print(chars)
 
-		# EXAMINA Y GUARDA LOS CARACTERES EN SUS RESPECTIVAS LISTAS
-		for line in message:
-			linetext = []		# LINEA DE TEXTO ACTUAL
-			charl = []			# LISTA DE CARACTERES DE LA LINEA
-
-			linetext.append(line)
-
-			for i in line:
-				"""
-				print(i)
-				"""
-				charl.append(i)
-				chars.append(i)
-
-				"""
-				if i in charlist:
-					print("SE ENCUENTRA EN LA LISTA: {}".format(i))
-				else:
-					print("EL CARACTER: {} \nNO SE ENCUENTRA EN LA LISTA".format(i))
-				"""
-			"""
-			print(chars)
-			print(linetext)
-			print(charl)
-			"""
-
-		# COMIENZA EL PROCESO DE ENCRIPTACION
-
-		"""
-		1 => SE ENCRIPTA EN N4
-		2 => SE ENCRIPTA EN BINARIO
-		3 => SE GENERA y ENCRIPTA LA LLAVE PRIVADAE EN SHA256
-		4 => CODIFICACION FINAL FINAL
-		"""
-
-		for c in chars:
-			if c in chardic:
-				cval = chardic[c]
-				encodecharc.append(cval)
-				"""
-				print("ENCRIPATANDO: {a} -> {b}".format(a = c, b = cval))
-				"""
+		for i in chars:
+			if i.islower() == True:
+				#print("{} Es minuscula".format(i))
+				OBJ_CHAR = "£{}".format(CHARDIC[i])
+				enc_chars.append(OBJ_CHAR)
+			elif i.isupper() == True:
+				#print("{} Es mayuscula".format(i))
+				OBJ_CHAR = "±{}".format(CHARDIC[i.lower()])
+				enc_chars.append(OBJ_CHAR)
+			elif i == " ":
+				#print(i)
+				enc_chars.append(str("_" + CHARDIC[i]))
 			else:
-				encodecharc.append(c)
-		"""
-		print(encodecharc)
-		print("\nMENSAJE ORIGINAL:\n{}".format("".join(chars)))
-		print("\nMENSAJE ENCRIPTADO:\n{}".format("".join(encodecharc)))
-		"""
+				if i not in CHARDIC:
+					# ALMACENA EL RESTO DE CARACTERES QUE NO SE ENCUENTREN DE FORMA ESPECIAL
+					#print(i , "NO ESTA")
+					enc_chars.append(str("æ{}".format(i)))
+				elif i == "\n":
+					#print("ES UNA SECUENCIA")
+					OBJ_CHAR = "¢n"
+					enc_chars.append(OBJ_CHAR)
+				elif i == "\t":
+					#print("ES UNA SECUENCIA")
+					OBJ_CHAR = "¢t"
+					enc_chars.append(OBJ_CHAR)
+				else:
+					#print(i)
+					OBJ_CHAR = "æ{}".format(i)
+					enc_chars.append(OBJ_CHAR)
 
-		# INICIO DE LOS 3 PASOS
-		x = str("".join(encodecharc))			# CARACTERES UNIDOS
-		"""
-		y = hashlib.sha256(x.encode("utf-8"))	# ENCRIPTADO EN SHA-256
-		z = None							# GUARDADO LOCAL DE LA LLAVE CRIPTOGRAFICA
-		"""
-		final_message = x
+		#print(enc_chars, "\n")
+		#print(str("".join(enc_chars)))
+		final_message = str("".join(enc_chars))
 
 		return final_message
-
-
 def module_help ():
 	print("encode() 	   | Funcion -> {}".format(encode.__doc__))
 	print("decode() 	   | Funcion -> {}".format(decode.__doc__))
