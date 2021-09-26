@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def decode (message, keystatus):
 	"""CODIFICA LOS MENSAJES RECIBIDOS"""
 

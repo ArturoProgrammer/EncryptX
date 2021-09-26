@@ -1,17 +1,12 @@
+#!/usr/bin/env python3
+
 from io import open
 import hashlib
 import os
 import crypto
-import DBmanipulate
 
-# VALORES DE ENCRIPTACION N3 (E_N3)
-# CAMBIAR A N4 (E_N4)
-
-# # NOTE: CONCLUIR CON LA MANIPULACION DE BASE DE DATOS
-class KeyDB(DBmanipulate.DB):
-	def __init__(self):
-		pass
-
+# VALORES DE ENCRIPTACION N6 (E_N6)
+# CAMBIAR A NX (E_NX)
 
 
 # # WARNING: PRIMERO SE DEBE CONCLUIR LOS METODOS RELACIONADOS A LA MANIPULACION DE DB
@@ -45,6 +40,7 @@ def validation_key (key):
 		key_status = True
 	else:
 		key_status = False
+		print("LA LLAVE NO SE ENCUENTRA")
 
 	# Nos retornamos al directorio raiz
 	actual_dir = str(os.getcwd())
@@ -71,6 +67,12 @@ def savedbMsg (msg, ahash):
 
 					dbfile.write(DIC_LINE)
 					dbfile.close()
+					
+					
+					import EncryptX.trash
+					EncryptX.trash.garbageCollector('file:Xmsgdb1.xrk')
+					EncryptX.trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
+
 
 					# Nos retornamos al directorio raiz
 					actual_dir = str(os.getcwd())
@@ -125,8 +127,6 @@ def update (msg, newhash):
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
 			
-
-			# # NOTE: Garbage Collector no funciona - solucionar en trash.py
 			import trash
 			trash.garbageCollector('file:Xmsgdb1.xrk')
 			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
@@ -195,7 +195,9 @@ def hash_msg_gen (message):
 
 
 
+"""*** <=== PROCESO DE ENCRIPTACION N-6 CON PAIR CHARS ===> ***"""
 
+# # NOTE: Funcion terminada
 def decode (message, keystatus):
 	"""CODIFICA LOS MENSAJES RECIBIDOS"""
 
@@ -264,13 +266,12 @@ def decode (message, keystatus):
 					#print("***", OBJ_CHAR)
 					DEC_CHARS.append(OBJ_CHAR)
 			
-		print(DEC_CHARS, "\n")
+		#print(DEC_CHARS, "\n")
 		
 		final_message = str("".join(DEC_CHARS))
 		#print(final_message)
 
 		return final_message
-
 
 
 # # NOTE: funcion terminada 
