@@ -2,8 +2,8 @@
 # EncryptX
 Sistema de encriptacion multiplataforma para proyectos en Python 3.X.
 
-[![](estable.png)
-[![](dev.png)
+![](estable.png)
+![](dev.png)
 
 
 Version estable: _0.80_
@@ -32,14 +32,14 @@ Ideal para usos personales, desde encriptacion de mensajes sencillos, archivos h
 - Gestor de contenido en la base de datos
 - Sincronizador de base de datos
 - Capacidad de encriptacion para multiples archivos simultaneamente
-- Nuevo sistema de codificacion * **N-6** *
+- Nuevo sistema de codificacion **N-6**
 
 ## Instalacion
 Por pip:
-`python -m pip install EncryptX-stable`
+```python -m pip install EncryptX```
 
-O clona este repositorio para realizar aportaciones al proyecto:
-`git clone https://github.com/ArturoProgrammer/EncryptX.git`
+O clona este repositorio **dentro del directorio** de tu proyecto:
+```git clone https://github.com/ArturoProgrammer/EncryptX.git```
 
 ## Aplicaciones y uso
 Una vez instalado el paquete, podemos aplicar el siguiente codigo de ejemplo:
@@ -132,4 +132,5 @@ Y para actualizar la llave:
 key_generator.update(msg_hash, key_generator.gen_privkey(32))
 ```
 
-##Documentacion
+## Documentacion
+*Pendiente de escribir*
