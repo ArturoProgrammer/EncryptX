@@ -24,7 +24,7 @@ EncryptX es un sistema de encriptacion avanzado de nueva generacion diseñado pa
 Ideal para usos personales, desde encriptacion de mensajes sencillos, archivos hasta algo mayor como grandes proyectos a gran escala.
 
 ## Releases
-- EncryptX v0.80 [descargar aqui](link) estable
+- EncryptX v0.80 [descargar aqui](https://github.com/ArturoProgrammer/EncryptX/releases/tag/v0.8-beta.1) estable
 - EncryptX v0.85 [descargar aqui](link) dev
 
 ## Novedades
