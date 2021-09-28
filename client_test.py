@@ -1,38 +1,42 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
+# ARCHIVO CLIENTE DE PRUEBA PARA EL SOFTWARE
 
 from N4Lib import encripNFour
 import key_generator
+import DBmanipulate
+import cleaner
 
-f_io = open("ejemplo.txt", "r")
+f_io = open("ejemplo.txt", "r")	# EN ESTE CASO ENCRIPTAREMOS EL CONTENIDO DE UN ARCHIVO
 
 encripNFour.module_help()
 
-#i = 25536782
 
+# SE GENERAN LAS LLAVES CORRESPONDIENTES
 key_password = key_generator.gen_privkey(64)
-#key_password = '9ac23cb8ec74b0e5542005e8a800043257eecf884250bc641e76c96bd49442f8'
 pubkey = key_generator.gen_publickey(key_password)
 
 
-x = encripNFour.hash_msg_gen(f_io.readlines())	# MENSAJE NO ENCRIPTADO
-#x = i
-#x = "@ 0x7f1ca150ac38"
-print(x)
+
+anyndata = "".join(f_io.readlines())
+""""anyndata = "HOLA"""
+x = encripNFour.hash_msg_gen(anyndata)	# GENERANDO EL HASH
+print("HASH:", x)
+
 # SE GUARDA LA LLAVE PRIVADA Y EL HASH EN LA DB
-key_generator.savedbKey(key_password, x)
+i = key_generator.savedbKey(key_password, x)
 
-
-#encrip_msg = encripNFour.encode(f_io.readlines(), encripNFour.validation_key(key_password))
-encrip_msg = "KVES"
-print("\nHASH DE LLAVE: {}".format(x))
+# SE ENCRIPTA EL MENSAJE
+encrip_msg = encripNFour.encode(anyndata, encripNFour.validation_key(key_password))
 
 # SE GUARDA EL MENSAJE Y EL HASH EN LA DB
 encripNFour.savedbMsg(encrip_msg, x)
 
+
 f_io.close()	# SE CIERRA EL ARCHIVO. TODOS LOS DATOS YA ESTAN ALAMCENADOS EN EL PROGRAMA LOCAL
 
 print("|==> **MENSAJE CODIFICADO Y LLAVE: \n-> {a}\n-> {b}".format(a = encrip_msg, b = key_password))
-key_generator.saveKeys(key_password)
+key_generator.saveKeyOnFile(key_password)	# GUARDA LA LLAVE EN UN ARCHIVO DE TEXTO
 
 print("LONGITUD DE LLAVE PRIVADA: {}".format(len(key_password)))
 
@@ -42,6 +46,9 @@ print("LONGITUD DE LLAVE PUBLICA: {}".format(len(pubkey)))
 decodeval = encripNFour.decode(encrip_msg, encripNFour.validation_key(pubkey))
 print("\nMENSAJE DESENCRIPTADO: {}".format(decodeval))
 
-
 encripNFour.update(encrip_msg, x)
 key_generator.update(x, key_generator.gen_privkey(64))
+
+cleaner.clean()
+
+print("LA LLAVE ASOCIADA ES: {}".format(DBmanipulate.DB().getKey()))

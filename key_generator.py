@@ -4,7 +4,7 @@ import hashlib
 import sys
 import os
 from io import open
-import trash
+import EncryptX.trash
 
 """
 Metodo de llaves de encriptacion n.1
@@ -103,7 +103,18 @@ def gen_publickey(keyval):
 
 # Funcion termianda
 def savedbKey (key, hash):
-	"""Guarda la llave y su hash asociado en la BD"""
+	"""
+	Guarda la llave y su hash asociado en la BD
+	
+	Argumentos:
+	Key [Str]
+	HASH [Str]
+	"""
+
+	# COMPROBACION DE RECEPCION DE ARGUMENTOS -> VERDADERO
+	#print("LLAVE: {a}\nHASH: {b}".format(a = key, b = hash))
+
+
 	if hash != None:
 		directory = ".master/.access/dkcache/"
 		
@@ -113,7 +124,6 @@ def savedbKey (key, hash):
 			dbfile = open("Xkeydb0.xrk", "a")
 
 			DIC_LINE = "{b} --> {a}\n".format(a = key, b = hash)
-
 			dbfile.write(DIC_LINE)
 			dbfile.close()
 
@@ -129,7 +139,7 @@ def savedbKey (key, hash):
 
 			os.mkdir(root_1)
 			os.chdir(root_1)
-			os.mkdir(root_2)
+			os.mkdir(root_2) 
 			os.chdir(root_2)
 			os.mkdir(root_3)
 			os.chdir(root_3)
@@ -141,8 +151,9 @@ def savedbKey (key, hash):
 			dbfile.write(DIC_LINE)
 			dbfile.close()
 			
-			trash.garbageCollector('file:Xkeydb0.xrk')
-			
+			EncryptX.trash.garbageCollector('file:Xkeydb0.xrk')
+			EncryptX.trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
+
 			# Nos retornamos al directorio raiz
 			actual_dir = str(os.getcwd())
 			actual_dir = actual_dir[:-23]
@@ -153,6 +164,7 @@ def savedbKey (key, hash):
 
 def update (hash, newkey):
 	"""Actualiza la DB reemplazando la antigua clave privada asociada a un hash, por una nueva clave"""
+
 	if isinstance(hash, str) == True:
 		if len(hash) >= 1:
 			_path =  ".master/.access/dkcache/"
@@ -182,10 +194,12 @@ def update (hash, newkey):
 			_db = open("Xkeydb0.xrk", "w")
 			_db.write(file_lines)
 			_db.close()	# Se cierra el enlace nuevamente tras concluir la re-escritura
-			
+
+
 			import trash
 			trash.garbageCollector('file:Xkeydb0.xrk')
-			
+			trash.synchronizer(msg_db = "Xmsgdb1.xrk", key_db = "Xkeydb0.xrk")
+
 			# Nos retornamos al directorio raiz
 			actual_dir = str(os.getcwd())
 			actual_dir = actual_dir[:-23]
@@ -193,12 +207,12 @@ def update (hash, newkey):
 			os.chdir(actual_dir)
 
 			if oldkey != newkey:
-				print("*-= {a} HAS BEEN REPLACED BY {b} =-*".format(a = oldkey, b = newkey))
+				print("*-= THE OLD KEY HAS BEEN REPLACED BY {b} =-*".format(b = str(newkey)[:int(len(newkey)/4)]))
 
 
 # Funcion terminada
-def saveKeys(keyvalue):
+def saveKeyOnFile(keyvalue):
 	"""Guarda en un archivo de texto plano la llave criptografica asociada a su hash correspondiente"""
 	file = open("MyProjectKey.txt", "w")
-	file.write(str(keyvalue))
+	file.write(str(keyvalue)[:int(len(keyvalue)/4)])
 	file.close()
