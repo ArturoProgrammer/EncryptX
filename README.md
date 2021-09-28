@@ -1,13 +1,9 @@
 
 # EncryptX
-Sistema de encriptacion multiplataforma para proyectos en Python 3.X.
-
 ![](rsc/estable.svg)
 ![](rsc/dev.svg)
 
-
-Version estable: _0.80_
-Version actual dev: _0.85_
+Sistema de encriptacion multiplataforma para proyectos en Python 3.X.
 
 ## Contenidos
 1. [Informacion General](#informacion-general)
