@@ -28,7 +28,7 @@ Ideal para usos personales, desde encriptacion de mensajes sencillos, archivos h
 - Gestor de contenido en la base de datos
 - Sincronizador de base de datos
 - Capacidad de encriptacion para multiples archivos simultaneamente
-- Nuevo sistema de codificacion * **N-6** *
+- Nuevo sistema de codificacion **N-6**
 
 ## Instalacion
 Por pip:
