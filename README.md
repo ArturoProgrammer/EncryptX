@@ -2,8 +2,8 @@
 # EncryptX
 Sistema de encriptacion multiplataforma para proyectos en Python 3.X.
 
-![](rsc/estable.png)
-![](rsc/dev.png)
+![](rsc/estable.svg)
+![](rsc/dev.svg)
 
 
 Version estable: _0.80_
